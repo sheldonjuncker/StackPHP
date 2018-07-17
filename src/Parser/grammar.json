@@ -1,0 +1,22 @@
+{
+  "parser": {
+    "grammar": {
+      "start": "program .",
+      "program": "statements",
+      "statements": [
+        "statement",
+        "statements statement"
+      ],
+      "statement": "expr ;",
+      "expr": [
+        "NUMBER",
+        "ID",
+        "expr + expr",
+        "expr - expr",
+        "expr * expr",
+        "expr / expr",
+        "ID = expr"
+      ]
+    }
+  }
+}
