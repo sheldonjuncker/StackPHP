@@ -13,4 +13,10 @@ class TokenLocation
 
 	//@var int The starting character position.
 	public $row;
+
+	public function __construct(int $line, int $row)
+	{
+		$this->line = $line;
+		$this->row = $row;
+	}
 }
