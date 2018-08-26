@@ -2,26 +2,31 @@
 
 namespace Stack\Lexer;
 
+use Stack\Lexer\Reader\StringReader;
+use Stack\Lexer\Reader\NumberReader;
+
 class Lexer
 {
 	//@var resource $stream The stream containing the input text.
 	protected $stream;
 
-	//@var TokenLocation $location The location in the input stream.
-	protected $location;
+	//@var TokenLocation[] $locations The location of every character in the input stream. (TODO: optimize)
+	protected $locations = [];
 
 	/*
 	 * @param $stream Must be a valid stream resource.
 	 */
 	public function __construct($stream)
 	{
-		$this->location = new TokenLocation(1, 0);
+		$this->locations = [new TokenLocation(1, 0)];
 
 		$resourceType = get_resource_type($stream);
 		if($resourceType !== "stream")
 		{
 			throw new LexerException("Invalid resource type: $resourceType.");
 		}
+
+		$this->stream = $stream;
 	}
 
 	/*
@@ -29,7 +34,7 @@ class Lexer
 	 */
 	public function getLocation(): TokenLocation
 	{
-		return $this->location;
+		return end($this->locations);
 	}
 
 	public function lex(): ?Token
@@ -48,51 +53,153 @@ class Lexer
 
 	protected function lexToken(): ?Token
 	{
-		//Keep track of the starting location of the token
-		$startLocation = clone $this->getLocation();
-
 		//TODO: Does not account for leading whitespace
 		$c = $this->readCharacter();
 
+		if($c === '')
+		{
+			return NULL;
+		}
+
 		switch(true)
 		{
-			case ctype_digit($c):
+			case ctype_digit($c) || $c == '-':
 				return $this->readNumber();
 				break;
 
 			case ctype_alpha($c):
-				return $this->readIdentifier();
+				return $this->readIdentifier($c);
 				break;
 
-			case $c == '"' || $c == '\'':
+			case $c == '"':
 				return $this->readString();
 				break;
 
+			case in_array($c, $this->getIgnoredCharacters()):
+				return $this->lexToken();
+				break;
+
 			default:
-				throw new LexerException("Unexpected character: $c.");
+				throw new LexerException("Unexpected character: " . ord($c) . ".");
 		}
 	}
 
-	protected function readCharacter(): string
+	/*
+	 * Reads a character from the input stream
+	 * and updates the token location.
+	 */
+	public function readCharacter(): string
 	{
+		$startLocation = $this->getLocation();
+
 		$c = fgetc($this->stream);
 
+		//Don't update position for end of input
+		if($c === false)
+		{
+			return '';
+		}
+
+		//Update position
 		if($c == "\n")
 		{
-			$this->getLocation()->line++;
-			$this->getLocation()->row = 0;
+			$this->pushLocation(new TokenLocation($startLocation->line + 1, 0));
 		}
 
 		else
 		{
-			$this->getLocation()->row++;
+			$this->pushLocation(new TokenLocation($startLocation->line, $startLocation->row + 1));
 		}
 
 		return $c;
 	}
 
-	public function getIgnoredCharacters(): string
+	/*
+	 * Adds to the list of locations.
+	 */
+	protected function pushLocation(TokenLocation $location)
 	{
-		return " \t\r\n";
+		array_push($this->locations, $location);
+	}
+
+	/*
+	 * Restores the last location.
+	 */
+	public function popLocation()
+	{
+		array_pop($this->locations);
+	}
+
+	/*
+	 * Unreads a character from the input stream
+	 * and updates the token location.
+	 */
+	public function unreadCharacter(string $c)
+	{
+		//Can't unread the end of input
+		if($c === '')
+		{
+			return;
+		}
+
+		//Go back one character in the input stream
+		fseek($this->stream, -1, SEEK_CUR);
+
+		//Remove last location
+		$this->popLocation();
+	}
+
+	protected function getIgnoredCharacters(): array
+	{
+		return [
+			"\t",
+			"\r",
+			"\n",
+			" "
+		];
+	}
+
+	protected function readString(): Token
+	{
+		return StringReader::create($this)->read($start);
+	}
+
+	/*
+	 * Reads an identifier or data type.
+	 */
+	protected function readIdentifier(string $start): Token
+	{
+		$id = $start;
+
+		$tokenType = Token::ID;
+		if(ctype_upper($start))
+		{
+			$tokenType = Token::TYPE;
+		}
+
+		while(true)
+		{
+			$c = $this->readCharacter();
+			if(ctype_alnum($c))
+			{
+				$id .= $c;
+			}
+
+			else
+			{
+				$this->unreadCharacter($c);
+				break;
+			}
+		}
+
+		return new Token($tokenType, $id, $this->getLocation());
+	}
+
+	/*
+	 * Reads an integer or decimal.
+	 */
+	public function readNumber(string $start): Token
+	{
+		return NumberReader::create($this)->read($start);
 	}
 }

@@ -18,5 +18,5 @@ abstract class Reader
 		$this->lexer = $lexer;
 	}
 
-	abstract public function read(): Token;
+	abstract public function read(string $start): Token;
 }

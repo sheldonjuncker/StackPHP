@@ -1,1 +1,8 @@
+
 imAnIdentifier
+
+"I'm a string!"
+
+ImAType
+
+"So what."
