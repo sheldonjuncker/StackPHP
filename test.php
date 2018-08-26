@@ -2,7 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
-$lexer = new Stack\Lexer\Lexer(STDIN);
+$fileHandle = fopen("test.txt", "r");
+$lexer = new Stack\Lexer\Lexer($fileHandle);
 
 while($token = $lexer->lex())
 {
