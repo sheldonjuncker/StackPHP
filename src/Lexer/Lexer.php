@@ -64,7 +64,7 @@ class Lexer
 		switch(true)
 		{
 			case ctype_digit($c) || $c == '-':
-				return $this->readNumber();
+				return $this->readNumber($c);
 				break;
 
 			case ctype_alpha($c):
@@ -72,7 +72,7 @@ class Lexer
 				break;
 
 			case $c == '"':
-				return $this->readString();
+				return $this->readString($c);
 				break;
 
 			case in_array($c, $this->getIgnoredCharacters()):
@@ -159,7 +159,7 @@ class Lexer
 		];
 	}
 
-	protected function readString(): Token
+	protected function readString(string $start): Token
 	{
 		return StringReader::create($this)->read($start);
 	}

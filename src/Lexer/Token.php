@@ -9,6 +9,8 @@ class Token
 {
 	#Token Types
 
+	const UNKNOWN = -1;
+
 	//Literals
 	const ID = 0;
 	const NUM = 1;
@@ -80,7 +82,7 @@ class Token
 	//@var int The type of the token (ID, NUM, etc.)
 	public $type;
 
-	//@var string The textual representation of the read token.
+	//@var mixed The textual/numeric representation of the read token.
 	public $value;
 
 	//@var TokenLocation Represents the location of the token within the input stream.
@@ -89,7 +91,7 @@ class Token
 	/*
 	 * Constructs a new token.
 	 */
-	public function __construct(int $type, string $value, TokenLocation $location)
+	public function __construct(int $type, $value, TokenLocation $location)
 	{
 		$this->type = $type;
 		$this->value = $value;

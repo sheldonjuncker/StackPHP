@@ -1,8 +1,1 @@
-
-imAnIdentifier
-
-"I'm a string!"
-
-ImAType
-
-"So what."
+3 -3 "string" id Id
