@@ -101,22 +101,22 @@ class Token
 	/*
 	 * Gets all of the keyword tokens.
 	 */
-	public function getKeywords(): array
+	public static function getKeywords(): array
 	{
 		return [
-			self::IF,
-			self::ELSE,
-			self::FOR,
-			self::BREAK,
-			self::CONTINUE,
-			self::FUNCTION,
-			self::RETURN,
-			self::T_CLASS,
-			self::PUBLIC,
-			self::PROTECTED,
-			self::PRIVATE,
-			self::PACKAGE,
-			self::NEW
+			"if"		=> self::IF,
+			"else"		=> self::ELSE,
+			"for"		=> self::FOR,
+			"break"		=> self::BREAK,
+			"continue"	=> self::CONTINUE,
+			"function"	=> self::FUNCTION,
+			"return"	=> self::RETURN,
+			"class"		=> self::T_CLASS,
+			"public"	=> self::PUBLIC,
+			"protected"	=> self::PROTECTED,
+			"private"	=> self::PRIVATE,
+			"package"	=> self::PACKAGE,
+			"new"		=> self::NEW
 		];
 	}
 }

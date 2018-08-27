@@ -192,6 +192,13 @@ class Lexer
 			}
 		}
 
+		//Check for keyword
+		$keyword = strtolower($id);
+		if(isset(Token::getKeywords()[$keyword]))
+		{
+			$tokenType = Token::getKeywords()[$keyword];
+		}
+
 		return new Token($tokenType, $id, $this->getLocation());
 	}
 
