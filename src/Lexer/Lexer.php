@@ -53,7 +53,6 @@ class Lexer
 
 	protected function lexToken(): ?Token
 	{
-		//TODO: Does not account for leading whitespace
 		$c = $this->readCharacter();
 
 		if($c === '')
@@ -73,6 +72,10 @@ class Lexer
 
 			case $c == '"':
 				return $this->readString($c);
+				break;
+
+			case isset(Token::getCharacterTokens()[$c]):
+				return new Token(Token::getCharacterTokens()[$c], $c, $this->getLocation());
 				break;
 
 			case in_array($c, $this->getIgnoredCharacters()):

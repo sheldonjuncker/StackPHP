@@ -1,1 +1,33 @@
-IF ELSE blah
+package Animal;
+
+/*
+ * The cat animal, a strangely demonic and small breed of dog.
+ */
+class Cat : Animal
+{
+	//Im a comment
+	public sleep()
+	{
+		system.time.sleep(60 * 60 * 20);
+	}
+
+	public eat(Food item)
+	{
+		if(!item.tastesGoodTo(this))
+		{
+			throw new ScratchingBitingException("Die.");
+		}
+
+		else
+		{
+			system.console.write("Purr...Die.");
+		}
+	}
+
+	public getMood(): Mood
+	{
+		int rand = system.rand.get(100);
+
+		return new Mood(rand == 99 ? Mood::PURR : Mood::DIE);
+	}
+}

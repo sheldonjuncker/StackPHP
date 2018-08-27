@@ -55,17 +55,12 @@ class Token
 	const OR = 24;
 	const XOR = 25;
 	const NOT = 31;
+	const QMARK = 32;
 
 	//Comparison operators
-	const EQ = 26; //==
+	const EQ = 26;
 	const GT = 27;
 	const LT = 28;
-	const GTE = 29;
-	const LTE = 30;
-	const NE = 32;
-
-	//Other operators
-	const ASSIGN = 33;
 
 	#Open/Close Tokens
 	const LBRACE = 34;
@@ -78,6 +73,7 @@ class Token
 	#Colons
 	const SEMI = 41;
 	const COLON = 42;
+	const COMMA = 43;
 
 	//@var int The type of the token (ID, NUM, etc.)
 	public $type;
@@ -117,6 +113,40 @@ class Token
 			"private"	=> self::PRIVATE,
 			"package"	=> self::PACKAGE,
 			"new"		=> self::NEW
+		];
+	}
+
+	/*
+	 * Maps single characters to token types.
+	 * Parser handles all multiple character tokens
+	 * where the leading token isn't able to uniquely identify it.
+	 */
+	public static function getCharacterTokens(): array
+	{
+		return [
+			'+' => self::PLUS,
+			'-' => self::MINUS,
+			'*' => self::TIMES,
+			'/' => self::DIVIDE,
+			'%' => self::MOD,
+			'.' => self::DOT,
+			'&' => self::AND,
+			'|' => self::OR,
+			'^' => self::XOR,
+			'!' => self::NOT,
+			'?' => self::QMARK,
+			'=' => self::EQ,
+			'>' => self::GT,
+			'<' => self::LT,
+			'{' => self::LBRACE,
+			'}' => self::RBRACE,
+			'(' => self::LPAREN,
+			')' => self::RPAREN,
+			'[' => self::LBRACKET,
+			']' => self::RBRACKET,
+			';' => self::SEMI,
+			':' => self::COLON,
+			',' => SELF::COMMA
 		];
 	}
 }
