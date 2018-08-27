@@ -1,5 +1,9 @@
 package Animal;
 
+//TODO: Add in single-line and multi-line comments.
+//TODO: Do something with single quotes (strings, chars, w/e)
+//TODO: Write performance tester and optimize (I want to see overall 50% improvements in performance)
+
 /*
  * The cat animal, a strangely demonic and small breed of dog.
  */
