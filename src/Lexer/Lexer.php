@@ -37,6 +37,11 @@ class Lexer
 		return end($this->locations);
 	}
 
+	/**
+	 * Lexes the input and attempts to return a token.
+	 *
+	 * @return null|Token
+	 */
 	public function lex(): ?Token
 	{
 		//End of input
@@ -49,6 +54,21 @@ class Lexer
 		{
 			return $this->lexToken();
 		}
+	}
+
+	/**
+	 * Attempts to lex all remaining input into tokens.
+	 *
+	 * @return array
+	 */
+	public function lexAll(): array
+	{
+		$tokens = [];
+		while($token = $this->lex())
+		{
+			$tokens[] = $token;
+		}
+		return $tokens;
 	}
 
 	protected function lexToken(): ?Token
