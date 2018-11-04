@@ -75,8 +75,17 @@ abstract class LexerTest extends \PHPUnit\Framework\TestCase
 	{
 		foreach($codeToTokenMap as $code => $tokensExpected)
 		{
+			if(strlen($code) > 1024)
+			{
+				$codeDisplay = substr($code, 0, 1024) . "...";
+			}
+			else
+			{
+				$codeDisplay = $code;
+			}
+
 			print "\nTesting code:\n";
-			print $code . "\n";
+			print $codeDisplay . "\n";
 
 			try
 			{
