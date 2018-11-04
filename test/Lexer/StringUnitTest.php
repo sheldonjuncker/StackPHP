@@ -51,23 +51,48 @@ class StringUnitTest extends LexerTest
 			"\\xA0" => hex2bin("A0"),
 			"\\x0A" => hex2bin("0A"),
 
+			//Non-escapable
+			"\\xGA" => "xGA",
+			"\q" => "q",
+
 			//Big string
 			str_repeat("a", 1024 * 1024) => NULL,
 		];
 
 		//Test all escape sequences
-		foreach($escapeMappings as $escapeChar => $ascii)
-		{
+		foreach ($escapeMappings as $escapeChar => $ascii) {
 			$strings["\\" . $escapeChar] = $ascii;
-		}
+			}
+
+			$codeToTokenMap = [];
+			foreach ($strings as $code => $value) {
+				$quotedCode = '"' . $code . '"';
+
+				if ($value === NULL) {
+					$value = $code;
+				}
+
+				$codeToTokenMap[$quotedCode] = [
+					[Token::STRING, $value]
+				];
+			}
+
+			$this->assertAllCodeToTokens($codeToTokenMap);
+	}
+
+	public function testBadStrings()
+	{
+		$strings = [
+			"\"" => NULL,
+			"\\" => NULL,
+			"\\777" => NULL
+		];
 
 		$codeToTokenMap = [];
-		foreach($strings as $code => $value)
-		{
+		foreach ($strings as $code => $value) {
 			$quotedCode = '"' . $code . '"';
 
-			if($value === NULL)
-			{
+			if ($value === NULL) {
 				$value = $code;
 			}
 
@@ -76,6 +101,6 @@ class StringUnitTest extends LexerTest
 			];
 		}
 
-		$this->assertAllCodeToTokens($codeToTokenMap);
+		$this->assertAllCodeToTokens($codeToTokenMap, true);
 	}
 }

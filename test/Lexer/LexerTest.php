@@ -93,8 +93,10 @@ abstract class LexerTest extends \PHPUnit\Framework\TestCase
 			}
 			catch(LexerException $e)
 			{
+				print "Exception: " . $e->getMessage();
 				if($expectingFailure)
 				{
+					$this->assertTrue(true);
 					continue;
 				}
 			}

@@ -2,6 +2,7 @@
 
 namespace Stack\Lexer\Reader;
 
+use Stack\Lexer\LexerException;
 use Stack\Lexer\Token;
 
 class StringReader extends Reader
@@ -24,7 +25,7 @@ class StringReader extends Reader
 			//Unexpected EOF
 			if($c === '')
 			{
-				throw new \Exception("Unexpected EOF while lexing string.");
+				throw new LexerException("Unexpected EOF while lexing string.");
 			}
 
 			//Check for escape character
@@ -91,6 +92,12 @@ class StringReader extends Reader
 				$this->lexer->unreadCharacter($c2);
 			}
 
+			//Invalid octal
+			if(octdec($octal) > octdec("377"))
+			{
+				throw new LexerException("Octal $octal is higher than the limit of 377.");
+			}
+
 			return chr(octdec($octal));
 		}
 
@@ -133,7 +140,7 @@ class StringReader extends Reader
 		$c = $this->lexer->readCharacter();
 		if($c === '')
 		{
-			throw new \Exception("Unexpected EOF while lexing string.");
+			throw new LexerException("Unexpected EOF while lexing string.");
 		}
 		return $c;
 	}
