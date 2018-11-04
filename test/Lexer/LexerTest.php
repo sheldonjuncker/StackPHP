@@ -63,10 +63,7 @@ abstract class LexerTest extends \PHPUnit\Framework\TestCase
 					$success = $success && $value == $token->value;
 				}
 
-				if($success)
-				{
-					$this->assertTrue(false);
-				}
+				$this->assertFalse($success);
 			}
 		}
 	}

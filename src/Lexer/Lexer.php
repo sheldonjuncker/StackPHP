@@ -254,10 +254,9 @@ class Lexer
 		}
 
 		//Check for keyword
-		$keyword = strtolower($id);
-		if(isset(Token::getKeywords()[$keyword]))
+		if(isset(Token::getKeywords()[$id]))
 		{
-			$tokenType = Token::getKeywords()[$keyword];
+			$tokenType = Token::getKeywords()[$id];
 		}
 
 		return new Token($tokenType, $id, $this->getLocation());
