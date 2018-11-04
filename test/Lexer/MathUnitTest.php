@@ -59,13 +59,6 @@ class MathUnitTest extends LexerTest
 			],
 		];
 
-		foreach($codeToTokenMap as $code => $tokensExpected)
-		{
-			print "\nTesting code:\n";
-			print $code . "\n";
-
-			$tokensRead = $this->lexText($code);
-			$this->assertTokenTypesAndValues($tokensRead, $tokensExpected);
-		}
+		$this->assertAllCodeToTokens($codeToTokenMap);
 	}
 }

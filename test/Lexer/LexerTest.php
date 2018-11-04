@@ -4,7 +4,9 @@
 namespace Stack\Test\Lexer;
 
 
-class LexerTest extends \PHPUnit\Framework\TestCase
+use Stack\Lexer\LexerException;
+
+abstract class LexerTest extends \PHPUnit\Framework\TestCase
 {
 	public function lexText(string $test): array
 	{
@@ -16,9 +18,20 @@ class LexerTest extends \PHPUnit\Framework\TestCase
 		return $lexer->lexAll();
 	}
 
-	public function assertTokenTypesAndValues(array $tokensRead, array $typesAndValuesExpected)
+	public function assertTokenTypesAndValues(array $tokensRead, array $typesAndValuesExpected, bool $expectingFailure = false)
 	{
-		$this->assertEquals(count($typesAndValuesExpected), count($tokensRead), 'Mismatch in expected and actual token count.');
+		if(!$expectingFailure)
+		{
+			$this->assertEquals(count($typesAndValuesExpected), count($tokensRead), 'Mismatch in expected and actual token count.');
+		}
+		else
+		{
+			if(count($typesAndValuesExpected) !== count($tokensRead))
+			{
+				$this->assertTrue(true);
+				return;
+			}
+		}
 
 		while($token = array_shift($tokensRead))
 		{
@@ -34,11 +47,50 @@ class LexerTest extends \PHPUnit\Framework\TestCase
 				$value = NULL;
 			}
 
-			$this->assertEquals($type, $token->type);
-			if($value !== NULL)
+			if(!$expectingFailure)
 			{
-				$this->assertEquals($value, $token->value);
+				$this->assertEquals($type, $token->type);
+				if($value !== NULL)
+				{
+					$this->assertEquals($value, $token->value);
+				}
 			}
+			else
+			{
+				$success = $type == $token->type;
+				if($value !== NULL)
+				{
+					$success = $success && $value == $token->value;
+				}
+
+				if($success)
+				{
+					$this->assertTrue(false);
+				}
+			}
+		}
+	}
+
+	public function assertAllCodeToTokens(array $codeToTokenMap, bool $expectingFailure = false)
+	{
+		foreach($codeToTokenMap as $code => $tokensExpected)
+		{
+			print "\nTesting code:\n";
+			print $code . "\n";
+
+			try
+			{
+				$tokensRead = $this->lexText($code);
+			}
+			catch(LexerException $e)
+			{
+				if($expectingFailure)
+				{
+					continue;
+				}
+			}
+
+			$this->assertTokenTypesAndValues($tokensRead, $tokensExpected, $expectingFailure);
 		}
 	}
 }

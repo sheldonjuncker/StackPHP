@@ -97,9 +97,9 @@ class NumberReader extends Reader
 			$this->lexer->unreadCharacter($c);
 		}
 
-		//Convert string to float
+		//Match as string, can be converted later
 		$token->type = Token::NUM;
-		$token->value = floatval($match);
+		$token->value = $match;
 		return $token;
 	}
 
