@@ -1,7 +1,11 @@
 {
   "autoload": {
     "psr-4": {
-      "Stack\\": "src/"
+      "Stack\\": "src/",
+      "Stack\\Test\\": "test/"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7"
   }
 }

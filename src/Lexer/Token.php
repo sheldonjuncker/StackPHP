@@ -7,75 +7,78 @@ namespace Stack\Lexer;
  */
 class Token
 {
-	#Token Types
+	# Token Types
 
-	const UNKNOWN = -1;
+	const UNKNOWN = 'unknown';
 
-	//Literals
-	const ID = 0;
-	const NUM = 1;
-	const STRING = 2;
-	const TYPE = 40;
+	// Literals
+	const ID = 'id';
+	const NUM = 'num';
+	const STRING = 'string';
+	const TYPE = 'type';
 
 	#Keywords
 
-	//Control structure keywords
-	const IF = 3;
-	const ELSE = 4;
-	const FOR = 5;
-	const BREAK = 6;
-	const CONTINUE = 7;
+	// Control structure keywords
+	const IF = 'if';
+	const ELSE = 'else';
+	const FOR = 'for';
+	const BREAK = 'break';
+	const CONTINUE = 'continue';
 
-	//Function keywords
-	const FUNCTION = 8;
-	const RETURN = 9;
+	// Function keywords
+	const FUNCTION = 'function';
+	const RETURN = 'return';
 
-	//Class keywords
-	const T_CLASS = 10;
-	const PUBLIC = 11;
-	const PROTECTED = 12;
-	const PRIVATE = 13;
-	const PACKAGE = 14;
-	const NEW = 21;
+	// Class keywords
+	const T_CLASS = 'class';
+	const PUBLIC = 'public';
+	const PROTECTED = 'protected';
+	const PRIVATE = 'private';
+	const PACKAGE = 'package';
+	const NEW = 'new';
 
-	#Operators
+	# Operators
 
-	//Mathematical Operators
-	const PLUS = 15;
-	const MINUS = 16;
-	const TIMES = 17;
-	const DIVIDE = 19;
-	const MOD = 20;
+	// Mathematical Operators
+	const PLUS = '+';
+	const MINUS = '-';
+	const TIMES = '*';
+	const DIVIDE = '/';
+	const MOD = '%';
 
-	//Object operators
-	const DOT = 22;
+	// Object operators
+	const DOT = '.';
 
-	//Logical operators
-	const AND = 23;
-	const OR = 24;
-	const XOR = 25;
-	const NOT = 31;
-	const QMARK = 32;
+	// Logical operators
+	const AND = 'and';
+	const OR = 'or';
+	const XOR = 'xor';
+	const NOT = 'not';
+	const QMARK = '?';
 
-	//Comparison operators
-	const EQ = 26;
-	const GT = 27;
-	const LT = 28;
+	// Comparison operators
+	const EQ = 'eq';
+	const GT = '>';
+	const LT = '<';
 
-	#Open/Close Tokens
-	const LBRACE = 34;
-	const RBRACE = 35;
-	const LPAREN = 36;
-	const RPAREN = 37;
-	const LBRACKET = 38;
-	const RBRACKET = 39;
+	# Open/Close Tokens
+	const LBRACE = '{';
+	const RBRACE = '}';
+	const LPAREN = '(';
+	const RPAREN = ')';
+	const LBRACKET = '[';
+	const RBRACKET = ']';
 
-	#Colons
-	const SEMI = 41;
-	const COLON = 42;
-	const COMMA = 43;
+	# Colons
+	const SEMI = ';';
+	const COLON = ':';
+	const COMMA = ',';
 
-	//@var int The type of the token (ID, NUM, etc.)
+	# Comments
+	const COMMENT = '#';
+
+	//@var string The type of the token (ID, NUM, etc.)
 	public $type;
 
 	//@var mixed The textual/numeric representation of the read token.
@@ -87,7 +90,7 @@ class Token
 	/*
 	 * Constructs a new token.
 	 */
-	public function __construct(int $type, $value, TokenLocation $location)
+	public function __construct(string $type, $value, TokenLocation $location)
 	{
 		$this->type = $type;
 		$this->value = $value;
@@ -146,7 +149,7 @@ class Token
 			']' => self::RBRACKET,
 			';' => self::SEMI,
 			':' => self::COLON,
-			',' => SELF::COMMA
+			',' => self::COMMA
 		];
 	}
 }

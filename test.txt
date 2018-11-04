@@ -1,15 +1,11 @@
 package Animal;
 
-//TODO: Add in single-line and multi-line comments.
-//TODO: Do something with single quotes (strings, chars, w/e)
-//TODO: Write performance tester and optimize (I want to see overall 50% improvements in performance)
-
-/*
- * The cat animal, a strangely demonic and small breed of dog.
- */
+#
+# The cat animal, a strangely demonic and small breed of dog.
+#
 class Cat : Animal
 {
-	//Im a comment
+	# nightey night
 	public sleep()
 	{
 		system.time.sleep(60 * 60 * 20);
@@ -35,3 +31,5 @@ class Cat : Animal
 		return new Mood(rand == 99 ? Mood::PURR : Mood::DIE);
 	}
 }
+
+# I'm a comment!

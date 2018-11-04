@@ -74,6 +74,10 @@ class Lexer
 				return $this->readString($c);
 				break;
 
+			case $c == "#":
+				return $this->readComment();
+				break;
+
 			case isset(Token::getCharacterTokens()[$c]):
 				return new Token(Token::getCharacterTokens()[$c], $c, $this->getLocation());
 				break;
@@ -162,6 +166,40 @@ class Lexer
 		];
 	}
 
+	/**
+	 * Reads a comment line.
+	 * Comment lines begin with a # and continue
+	 * to the end of the line.
+	 *
+	 * There are no multiline comments.
+	 *
+	 * @return Token
+	 */
+	protected function readComment(): Token
+	{
+		$location = $this->getLocation();
+
+		$comment = "";
+
+		while(($c = $this->readCharacter()) !== "\n")
+		{
+			if($c === '')
+			{
+				break;
+			}
+			$comment .= $c;
+		}
+
+		return new Token(Token::COMMENT, $comment, $location);
+	}
+
+	/**
+	 * Reads a string, starting and ending with a ".
+	 * Standard escape sequences are supported.
+	 *
+	 * @param string $start
+	 * @return Token
+	 */
 	protected function readString(string $start): Token
 	{
 		return StringReader::create($this)->read($start);

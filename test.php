@@ -5,8 +5,9 @@ require_once 'vendor/autoload.php';
 $fileHandle = fopen("test.txt", "r");
 $lexer = new Stack\Lexer\Lexer($fileHandle);
 
-while($token = $lexer->lex())
-{
-	print_r($token);
-	print "\n";
-}
+$tokens = [];
+while($tokens[] = $lexer->lex());
+
+$tokensJSON = json_encode($tokens, JSON_PRETTY_PRINT);
+
+print $tokensJSON;
