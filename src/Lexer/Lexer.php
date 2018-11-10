@@ -138,6 +138,12 @@ class Lexer
 			$charactersOnLine = $startLocation->row;
 			$this->lineLengths->unshift($charactersOnLine);
 
+			//No more than a 10 line history
+			if($this->lineLengths->count() > 10)
+			{
+				$this->lineLengths->pop();
+			}
+
 			$startLocation->row = 0;
 			$startLocation->line++;
 		}
