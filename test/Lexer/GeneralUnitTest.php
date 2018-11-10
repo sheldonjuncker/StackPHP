@@ -257,7 +257,7 @@ print "Cat is sleeping: " + trouble.isSleeping + ".";
 				Token::PLUS,
 				Token::STRING,
 				Token::SEMI
-		]
+			]
 		]);
 	}
 }

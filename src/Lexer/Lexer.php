@@ -7,18 +7,22 @@ use Stack\Lexer\Reader\NumberReader;
 
 class Lexer
 {
-	//@var resource $stream The stream containing the input text.
+	/** @var resource $stream The stream containing the input text. */
 	protected $stream;
 
-	//@var TokenLocation[] $locations The location of every character in the input stream. (TODO: optimize)
-	protected $locations = [];
+	/** @var \SplDoublyLinkedList $lineLengths The lengths of lines in the input for backtracking. */
+	protected $lineLengths = NULL;
+
+	/** @var TokenLocation $location The current token location. */
+	protected $location = NULL;
 
 	/*
 	 * @param $stream Must be a valid stream resource.
 	 */
 	public function __construct($stream)
 	{
-		$this->locations = [new TokenLocation(1, 0)];
+		$this->location = new TokenLocation(1, 0);
+		$this->lineLengths = new \SplDoublyLinkedList();
 
 		$resourceType = get_resource_type($stream);
 		if($resourceType !== "stream")
@@ -34,7 +38,7 @@ class Lexer
 	 */
 	public function getLocation(): TokenLocation
 	{
-		return end($this->locations);
+		return $this->location;
 	}
 
 	/**
@@ -130,31 +134,20 @@ class Lexer
 		//Update position
 		if($c == "\n")
 		{
-			$this->pushLocation(new TokenLocation($startLocation->line + 1, 0));
+			//Keep track of character count so that we can restore location
+			$charactersOnLine = $startLocation->row;
+			$this->lineLengths->unshift($charactersOnLine);
+
+			$startLocation->row = 0;
+			$startLocation->line++;
 		}
 
 		else
 		{
-			$this->pushLocation(new TokenLocation($startLocation->line, $startLocation->row + 1));
+			$startLocation->row++;
 		}
 
 		return $c;
-	}
-
-	/*
-	 * Adds to the list of locations.
-	 */
-	protected function pushLocation(TokenLocation $location)
-	{
-		array_push($this->locations, $location);
-	}
-
-	/*
-	 * Restores the last location.
-	 */
-	public function popLocation()
-	{
-		array_pop($this->locations);
 	}
 
 	/*
@@ -172,8 +165,16 @@ class Lexer
 		//Go back one character in the input stream
 		fseek($this->stream, -1, SEEK_CUR);
 
-		//Remove last location
-		$this->popLocation();
+		if($c == "\n")
+		{
+			$charactersOnLine = $this->lineLengths->shift();
+			$this->location->line--;
+			$this->location->row = $charactersOnLine;
+		}
+		else
+		{
+			$this->location->row--;
+		}
 	}
 
 	protected function getIgnoredCharacters(): array
