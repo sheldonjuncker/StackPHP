@@ -95,7 +95,7 @@ class Token
 	{
 		$this->type = $type;
 		$this->value = $value;
-		$this->location = $location;
+		$this->location = new TokenLocation($location->line, $location->row);
 	}
 
 	/*
