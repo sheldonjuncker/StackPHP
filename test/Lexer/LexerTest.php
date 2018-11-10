@@ -33,8 +33,10 @@ abstract class LexerTest extends \PHPUnit\Framework\TestCase
 			}
 		}
 
+		$tokenCount = 0;
 		while($token = array_shift($tokensRead))
 		{
+			$tokenCount++;
 			$typeAndValue = array_shift($typesAndValuesExpected);
 			if(is_array($typeAndValue))
 			{
@@ -49,10 +51,10 @@ abstract class LexerTest extends \PHPUnit\Framework\TestCase
 
 			if(!$expectingFailure)
 			{
-				$this->assertEquals($type, $token->type);
+				$this->assertEquals($type, $token->type, "Token {$tokenCount} type mismatch.");
 				if($value !== NULL)
 				{
-					$this->assertEquals($value, $token->value);
+					$this->assertEquals($value, $token->value, "Token {$tokenCount} value mismatch.");
 				}
 			}
 			else

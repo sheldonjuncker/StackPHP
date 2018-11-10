@@ -23,6 +23,7 @@ class Token
 	const IF = 'if';
 	const ELSE = 'else';
 	const FOR = 'for';
+	const WHILE = 'while';
 	const BREAK = 'break';
 	const CONTINUE = 'continue';
 
@@ -106,6 +107,7 @@ class Token
 			"if"		=> self::IF,
 			"else"		=> self::ELSE,
 			"for"		=> self::FOR,
+			"while"		=> self::WHILE,
 			"break"		=> self::BREAK,
 			"continue"	=> self::CONTINUE,
 			"function"	=> self::FUNCTION,
